@@ -1,0 +1,18 @@
+schema: kata.ai/schema/kata-ml/1.0/test/intents
+flow: order
+desc: Order flow intent test
+test:
+    "should trigger order":
+        message:
+            type: text
+            content: mau pesen pizza
+        expect:
+            intent: order
+    "should trigger order with attribute":
+        message:
+            type: text
+            content: mau pesen pizza all star
+        expect:
+            intent: order
+            attributes:
+                pizzaType: American All Star

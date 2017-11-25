@@ -1,0 +1,36 @@
+fallback: true
+priority: 0
+intents:
+    greet:
+        initial: true
+        classifier:
+            nlu: intent
+            match: greet
+    fallback:
+        fallback: true
+states:
+    init:
+        initial: true
+        transitions:
+            greeting:
+                condition: intent == "greet"
+            other:
+                fallback: true
+    greeting:
+        end: true
+        action:
+            name: greetBack
+    other:
+        end: true
+        action:
+            name: saySorry
+
+actions:
+    greetBack:
+        type: text
+        options:
+            text: hi!
+    saySorry:
+        type: text
+        options:
+            text: sorry, I can't help you.

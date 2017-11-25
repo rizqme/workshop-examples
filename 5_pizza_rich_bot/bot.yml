@@ -1,0 +1,142 @@
+schema: kata.ai/schema/kataml/1.0
+name: 05 Rich Pizza Bot
+desc: Bot for ordering pizza
+id: 5_pizza_rich_bot-rizqme
+lang: id
+version: 0.0.1
+flows:
+    order: $include(./flows/order.yml)
+    delivery: $include(./flows/delivery.yml)
+    fallback: $include(./flows/fallback.yml)
+nlus:
+    ner:
+        type: verstandTagger
+        options:
+            model: ner-jul-14-cnn
+    intent:
+        type: keyword
+        options:
+            keywords:
+                order:
+                    - pesan
+                    - pesen
+                    - beli
+                    - pesen pizza
+                    - pizza dong
+                    - pizza
+                cancel:
+                    - batal
+                    - cancel
+                    - ga jadi
+                    - gajadi
+                askOptions:
+                    - ada apa
+                    - adanya apa
+                    - pilihannya
+                    - pilihannya apa aja
+                    - apa aja
+                    - punya apa
+                greet:
+                    - hi
+                    - hello
+                    - halo
+                'yes':
+                    - ok
+                    - sip
+                    - 'yes'
+                    - yup
+                    - benar
+                    - betul
+                'no':
+                    - tidak
+                    - ngga
+                    - nope
+                    - ga
+                    - 'no'
+    pizzaType:
+        type: keyword
+        options:
+            keywords:
+                American All Star:
+                    - all star
+                    - aas
+                    - american all star
+                    - american
+                chicken BBQ:
+                    - chicken bbq
+                    - bbq
+                Chicken Lovers:
+                    - chicken lovers
+                    - lovers
+                Chicken Pepperoni:
+                    - chicken pepperoni
+                    - pepperoni
+    pizzaSize:
+        type: keyword
+        options:
+            keywords:
+                xl:
+                    - paling besar
+                    - paling gede
+                    - XL
+                l:
+                    - L
+                    - besar
+                    - large
+                m:
+                    - M
+                    - sedang
+                    - medium
+                s:
+                    - kecil
+                    - paling kecil
+                    - s
+                    - small
+    pizzaCrust:
+        type: keyword
+        options:
+            keywords:
+                thinCrust:
+                    - thin crust
+                    - thin
+                pan:
+                    - pan
+                handTossed:
+                    - hand tossed
+                    - tossed
+    pizzaQty:
+        type: keyword
+        options:
+            keywords:
+                satu:
+                    - 1
+                    - satu
+                dua:
+                    - 2
+                    - dua
+                tiga:
+                    - 3
+                    - tiga
+    pizzaInfo:
+        type: keyword
+        options:
+            keywords:
+                pizzaType:
+                    - tipenya
+                    - tipe
+                    - tipe nya
+                    - type
+                pizzaCrust:
+                    - pinggirannya
+                    - pinggiran
+                    - crust
+                    - crustnya
+                    - crust nya
+                pizzaSize:
+                    - ukurannya
+                    - ukuran nya
+                    - ukuran
+                    - size
+                    - size nya
+                    - sizenya
+tag: null

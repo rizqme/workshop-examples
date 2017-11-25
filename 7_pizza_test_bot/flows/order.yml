@@ -1,0 +1,231 @@
+priority: 10
+intents:
+    order:
+        initial: true
+        type: text
+        classifier:
+            nlu: intent
+            match: order
+        attributes:
+            pizzaType:
+                nlu: pizzaType
+            pizzaSize:
+                nlu: pizzaSize
+            pizzaCrust:
+                nlu: pizzaCrust
+            pizzaQty:
+                nlu: pizzaQty
+    backToInfo:
+        type: command
+        condition: content == 'backToInfo'
+    askInfo:
+        type: text
+        classifier:
+            nlu: intent
+            match: askOptions
+        attributes:
+            info:
+                nlu: pizzaInfo
+    addDetails:
+        classifier:
+            - nlu: pizzaType
+            - nlu: pizzaSize
+            - nlu: pizzaCrust
+            - nlu: pizzaQty
+        attributes:
+            pizzaType:
+                nlu: pizzaType
+            pizzaSize:
+                nlu: pizzaSize
+            pizzaCrust:
+                nlu: pizzaCrust
+            pizzaQty:
+                nlu: pizzaQty
+    yes:
+        classifier:
+            nlu: intent
+            match: "yes"
+    no:
+        classifier:
+            nlu: intent
+            match: "no"
+
+    reenter:
+        type: command
+        condition: content == "reenter"
+    cancel:
+        classifier:
+            nlu: intent
+            match: cancel
+
+states:
+    orderInfo:
+        initial: true
+        action:
+            - name: recordOrder
+              condition: "intent == 'addDetails' && 
+                    (attributes.pizzaType || attributes.pizzaSize || attributes.pizzaCrust || attributes.pizzaQty)"
+            - name: askPizzaType
+              condition: "!context.type"
+            - name: askPizzaCrust
+              condition: "context.type && !context.crust"
+            - name: askPizzaSize
+              condition: "context.type && context.crust && !context.size"
+            - name: askPizzaQty
+              condition: "context.type && context.crust && context.size && !context.qty"
+
+        transit:
+            context.crust: "attributes.pizzaCrust || context.crust || null"
+            context.size: "attributes.pizzaSize || context.size || null"
+            context.type: "attributes.pizzaType || context.type || null"
+            context.qty: "attributes.pizzaQty || context.qty || null"
+
+        transitions:
+            typeInfo:
+                condition: 
+                    - "intent == 'askInfo' && attributes.info == 'pizzaType'" 
+                    - "intent == 'askInfo' && !context.type  && !attributes.info"
+            crustInfo:
+                condition: 
+                    - "intent == 'askInfo' && attributes.info == 'pizzaCrust'"
+                    - "intent == 'askInfo' && !context.crust  && !attributes.info"
+            sizeInfo:
+                condition: 
+                    - "intent == 'askInfo' && attributes.info == 'pizzaSize'"
+                    - "intent == 'askInfo' && !context.size  && !attributes.info"
+            orderConfirm:
+                condition: "context.crust && context.size && context.type && context.qty"
+            orderInfo:
+                fallback: true
+                priority: 0
+    orderConfirm:
+        action:
+            name: confirmation
+        transitions:
+            cancelOrder:
+                condition: "intent == 'no' || intent == 'cancel'"
+            done:
+                condition: "intent == 'yes'"
+            orderConfirm:
+                fallback: true
+                priority: 0
+    cancelOrder:
+        end: true
+        action:
+            name: cancel
+        float:
+            priority: 15
+            condition: intent == 'cancel'
+    typeInfo:
+        action:
+            - name: giveTypeInfo
+            - name: returnToInfo
+        transitions:
+            orderInfo:
+                condition: intent == 'backToInfo'
+    crustInfo:
+        action:
+            - name: giveCrustInfo
+            - name: returnToInfo
+        transitions:
+            orderInfo:
+                condition: "intent == 'backToInfo'"
+    sizeInfo:
+        action:
+            - name: giveSizeInfo
+            - name: returnToInfo
+        transitions:
+            orderInfo:
+                condition: "intent == 'backToInfo'"
+    done:
+        action:
+            - name: done
+            - name: toDelivery
+        enter:
+            data.pizzaType: context.type
+            data.pizzaCrust: context.crust
+            data.pizzaSize: context.size
+            data.pizzaQty: context.qty
+        end: true
+
+actions:
+    recordOrder:
+        type: method
+        method: writeDetails
+        options:
+            text: "Baiklah saya catat"
+
+    askPizzaType:
+        type: text
+        options:
+            text: "Mau tipe apa?"
+    askPizzaSize:
+        type: text
+        options:
+            text: "Mau ukuran apa?"
+    askPizzaCrust:
+        type: text
+        options:
+            text: "Mau crust apa?"
+    askPizzaQty:
+        type: text
+        options:
+            text: "Mau beli berapa?"
+    returnToInfo:
+        type: command
+        options:
+            command: backToInfo
+    giveTypeInfo:
+        type: text
+        options:
+            text: "Pilihan tipe-nya:
+                1. American All Star
+                2. Chicken BBQ
+                3. Chicken Lovers
+                4. Chicken Pepperoni"
+    giveCrustInfo:
+        type: text
+        options:
+            text: "Pilihan crust-nya:
+                1. Thin Crust
+                2. Pan
+                3. Hand Tossed"
+    giveSizeInfo:
+        type: text
+        options:
+            text: "Pilihan ukuran-nya:
+                1. S - Kecil
+                2. M - Sedang
+                3. L - Besar
+                4. XL - Paling Besar"
+    confirmation:
+        type: text
+        options:
+            text: "Tolong konfirmasi ya: $(context.type), $(context.size), $(context.crust), $(context.qty) buah."
+    cancel:
+        type: text
+        options:
+            text: "Baiklah saya batalkan. Silahkan hubungi lagi jika ingin memesan."
+    done:
+        type: text
+        options:
+            text: "Sip! Saya proses ya order kamu."
+    toDelivery:
+        type: command
+        options:
+            command: toDelivery
+
+methods:
+  writeDetails(message, context, data, options): "
+    let text = options.text || '';
+    let result = [];
+    for (let i in message.attributes) {
+      if (message.attributes[i])
+        result.push(message.attributes[i]);
+    }
+
+    return {
+      type: 'text',
+      content: text + ' ' + result.join(', ')
+    }
+  "

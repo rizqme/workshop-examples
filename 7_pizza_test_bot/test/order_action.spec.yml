@@ -1,0 +1,12 @@
+schema: kata.ai/schema/kata-ml/1.0/test/actions
+desc: Order Actions Test
+flow: order
+test:
+    "should ask crust":
+        state: orderInfo
+        intent: addDetails
+        context:
+            type: Chicken BBQ
+            size: l
+        expect:
+            - action: askPizzaCrust

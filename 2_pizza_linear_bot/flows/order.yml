@@ -1,0 +1,130 @@
+priority: 1
+intents:
+        order:
+            initial: true
+            type: text
+            classifier:
+                nlu: intent
+                match: order
+        givePizzaType:
+            type: text
+            classifier:
+                nlu: pizzaType
+            attributes:
+                pizzaType:
+                    nlu: pizzaType
+        givePizzaCrust:
+            type: text
+            classifier:
+                nlu: pizzaCrust
+            attributes:
+                pizzaCrust:
+                    nlu: pizzaCrust
+        givePizzaSize:
+            type: text
+            classifier:
+                nlu: pizzaSize
+            attributes:
+                pizzaSize:
+                    nlu: pizzaSize
+        givePizzaQty:
+            type: text
+            classifier:
+                nlu: pizzaQty
+            attributes:
+                pizzaQty:
+                    nlu: pizzaQty
+        cancel:
+            type: text
+            classifier:
+                nlu: intent
+                match: cancel
+        reenter:
+            type: command
+            condition: 'content == "reenter"'
+states:
+    typeInquiry:
+        initial: true
+        action:
+            name: askType
+        transitions:
+            crustInquiry:
+                condition: intent == "givePizzaType"
+                mapping:
+                    context:
+                        pizzaType: attributes.pizzaType
+            typeInquiry:
+                fallback: true
+                priority: 0
+    crustInquiry:
+        action:
+            name: askCrust
+        transitions:
+            sizeInquiry:
+                condition: intent == "givePizzaCrust"
+                mapping:
+                    context:
+                        pizzaCrust: attributes.pizzaCrust
+            crustInquiry:
+                fallback: true
+                priority: 0
+    sizeInquiry:
+        action:
+            name: askSize
+        transitions:
+            qtyInquiry:
+                condition: intent == "givePizzaSize"
+                mapping:
+                    context:
+                        pizzaSize: attributes.pizzaSize
+            sizeInquiry:
+                fallback: true
+                priority: 0
+    qtyInquiry:
+        action:
+            name: askQty
+        transitions:
+            done:
+                condition: intent == "givePizzaQty"
+                mapping:
+                    context:
+                        pizzaQty: attributes.pizzaQty
+            qtyInquiry:
+                fallback: true
+                priority: 0
+    done:
+        action:
+            name: doConfirm
+        end: true
+    cancel:
+        float:
+            priority: 10
+            condition: intent == "cancel"
+        action:
+            name: doCancel
+        end: true
+actions:
+    askType:
+        type: text
+        options:
+            text: Mau tipe apa? (chicken bbq, chicken peperoni, american all star, chicken lovers)
+    askCrust:
+        type: text
+        options:
+            text: Mau crust apa? (thin crust, hand tossed, pan)
+    askSize:
+        type: text
+        options:
+            text: Mau size apa? (XL, L, M, S)
+    askQty:
+        type: text
+        options:
+            text: Mau berapa? (satu, dua, tiga)
+    doCancel:
+        type: text
+        options:
+            text: Ok, batal ya.
+    doConfirm:
+        type: text
+        options:
+            text: Ok, $(context.pizzaType) $(context.pizzaCrust) $(context.pizzaSize) $(context.pizzaQty).

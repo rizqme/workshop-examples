@@ -1,0 +1,69 @@
+intents:
+    toDelivery:
+        initial: true
+        type: command
+        condition: "content == 'toDelivery'"
+    deliveryInfo:
+        condition: "!context.name || !context.address"
+        attributes:
+            name:
+                nlu: ner
+                path: person
+            address:
+                nlu: ner
+                path: location
+
+states:
+    toDeliveryInfo:
+        initial: true
+        action:
+            - name: askName
+              condition: "!context.name && context.address"
+            - name: askAddress
+              condition: "context.name && !context.address"
+
+        transit:
+            context.name: "attributes.name || context.name || null"
+            context.address: "attributes.address || context.address || null"
+
+        transitions:
+            deliveryComplete:
+                condition: "context.name && context.address"
+            toDeliveryInfo:
+                fallback: true
+
+    deliveryComplete:
+        end: true
+        action:
+            name: deliveryComplete
+
+actions:
+    deliveryComplete:
+        type: method
+        method: writeCompleteOrder
+        options:
+            text: "Pesanan akan dikirim: "
+
+    askName:
+        type: text
+        options:
+            text: 'Boleh tau nama kamu?'
+
+    askAddress:
+        type: text
+        options:
+            text: 'Alamat kamu dimana?'
+
+methods:
+    writeCompleteOrder(message,context,data,options): "
+        let text = options.text || '';
+        let order = [];
+        for (let i in data){
+        order.push(data[i])
+        }
+
+        return {
+        type: 'text',
+        content: text + ' ' + ' atas nama ' + context.name + ' dengan alamat ' + context.address + ' dengan pesanan sebagai berikut ' + order.join(', ')
+        }
+    "

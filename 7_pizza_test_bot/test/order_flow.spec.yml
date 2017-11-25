@@ -1,0 +1,22 @@
+schema: kata.ai/schema/kata-ml/1.0/test/flow
+desc: Order Flow Test
+flow: order
+test:
+    "should order pizza":
+        message:
+            type: text
+            content: "mau pizza dong"
+        expect:
+            state: orderInfo
+            intent: order
+    "should add information":
+        message:
+            type: text
+            content: "all star thin crust"
+        expect:
+            state: orderInfo
+            context.type: American All Star
+            context.crust: thinCrust
+            responses:
+                - action: writeDetails
+                - action: askPizzaSize

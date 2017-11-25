@@ -1,0 +1,84 @@
+name: pizzanl
+lang: id
+entities:
+    intent:
+        type: trait
+        profile: default
+        labels:
+            - order
+            - addDetails
+            - confirm
+            - cancel
+            - typeOptions
+            - sizeOptions
+            - crustOptions
+            - askOptions
+    type:
+        type: dict
+        profile: default
+        dictionary:
+            American All Star:
+                    - all star
+                    - aas
+                    - american all star
+                    - american
+            chicken BBQ:
+                - chicken bbq
+                - bbq
+            Chicken Lovers:
+                - chicken lovers
+                - lovers
+            Chicken Pepperoni:
+                - chicken pepperoni
+                - pepperoni
+                - peperoni
+                - chicken peperoni
+    size:
+        type: dict
+        profile: default
+        dictionary:
+            XL:
+                - paling besar
+                - paling gede
+                - XL
+            L:
+                - L
+                - besar
+                - large
+            M:
+                - M
+                - sedang
+                - medium
+            S:
+                - kecil
+                - paling kecil
+                - s
+                - small
+    crust:
+        type: dict
+        profile: default
+        dictionary:
+            thinCrust:
+                - thin crust
+                - thin
+            pan:
+                - pan
+            handTossed:
+                - hand tossed
+                - tossed
+    qty:
+        type: dict
+        profile: default
+        dictionary:
+            satu:
+                - 1
+                - satu
+                - one
+            dua:
+                - 2
+                - dua
+                - two
+            tiga:
+                - 3
+                - tiga
+                - three

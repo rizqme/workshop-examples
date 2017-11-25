@@ -1,0 +1,42 @@
+schema: kata.ai/schema/kata-ml/1.0/test/states
+desc: Order State Test
+flow: order
+test:
+    "should add information":
+        state: orderInfo
+        intent: addDetails
+        attributes:
+            pizzaType: "American All Star"
+        message:
+            type: text
+            content: "all star"
+        expect:
+            context.type: "American All Star"
+            state: orderInfo
+    "should add multiple information":
+        state: orderInfo
+        intent: addDetails
+        attributes:
+            pizzaType: "American All Star"
+            pizzaSize: "l"
+        message:
+            type: text
+            content: "all star large"
+        expect:
+            context.type: "American All Star"
+            context.size: "l"
+            state: orderInfo
+    "should go to confirm if all info is provided":
+        state: orderInfo
+        intent: addDetails
+        context:
+            type: "American All Star"
+            size: "l"
+        message:
+            type: text
+            content: "thin crust satu"
+        attributes:
+            pizzaQty: satu
+            pizzaCrust: Thin Crust
+        expect:
+            state: orderConfirm

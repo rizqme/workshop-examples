@@ -1,0 +1,55 @@
+pesen pizza (@qty satu) dong #intent:order
+mau beli pizza #intent:order
+pesen dong #intent:order
+order pizza #intent:order
+pesen pizza (@type american all star) #intent:order
+pesen (@type chicken bbq) (@qty satu) yang (@crust thin crust) ya #intent:order
+pesen ya #intent:order
+(@type chicken lovers) #intent:addDetails
+(@qty satu) ya #intent:addDetails
+(@qty 1)  #intent:addDetails
+(@qty dua)  #intent:addDetails
+(@crust pan) #intent:addDetails
+(@crust thin crust) #intent:addDetails
+(@crust hand tossed) ya #intent:addDetails
+(@type all star) (@qty 1) #intent:addDetails
+(@type chicken peperoni) (@qty dua) (@crust hand tossed) ya #intent:addDetails
+(@type bbq) yang (@size kecil) (@qty satu) #intent:addDetails
+(@type american all star) (@crust thin crust) (@qty satu) ya yg (@size besar) #intent:addDetails
+iya #intent:confirm
+sipp #intent:confirm
+okee #intent:confirm
+sip deh #intent:confirm
+oke sip #intent:confirm
+iyes #intent:confirm
+yes #intent:confirm
+ya #intent:confirm
+engga #intent:cancel
+g jadi #intent:cancel
+gak jadi #intent:cancel
+cancel #intent:cancel
+cancel ya #intent:cancel
+gajadi ah #intent:cancel
+ada apa aja #intent:askOptions
+adanya apa aja? #intent:askOptions
+punya apa aja #intent:askOptions
+pilihannya apa #intent:askOptions
+ada apa? #intent:askOptions
+apa aja pilihannya? #intent:askOptions
+punya apa? #intent:askOptions
+punya tipe apa? #intent:typeOptions
+tipenya ada apa aja? #intent:typeOptions
+ada tipe apa #intent:typeOptions
+typenya ada apa #intent:typeOptions
+pilihan tipenya dong #intent:typeOptions
+pilih tipe #intent:typeOptions
+pilihan tipe nya #intent:typeOptions
+punya size apa aja #intent:sizeOptions
+ada size apa? #intent:sizeOptions
+ada ukuran apa aja? #intent:sizeOptions
+ukurannya? #intent:sizeOptions
+punya ukuran apa aja? #intent:sizeOptions
+crustnya? #intent:crustOptions
+ada crust apa? #intent:crustOptions
+pilihan crustnya apa? #intent:crustOptions
+ada crust apa aja #intent:crustOptions

@@ -1,0 +1,26 @@
+schema: kata.ai/schema/kataml/1.0
+name: 04 NL Pizza Bot
+desc: Bot for ordering pizza
+id: 4_pizza_nl_bot-rizqme
+lang: id
+version: 0.0.1
+flows:
+    order: $include(./flows/order.yml)
+    delivery: $include(./flows/delivery.yml)
+    fallback: $include(./flows/fallback.yml)
+nlus:
+    ner:
+        type: verstandTagger
+        options:
+            model: ner-jul-14-cnn
+    intent:
+        type: nl
+        options:
+            nluId: rizqme:pizzanl
+            asIntent: intent
+    entities:
+        type: nl
+        options:
+            nluId: rizqme:pizzanl
+    
+tag: null
