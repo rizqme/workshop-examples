@@ -53,3 +53,10 @@ crustnya? #intent:crustOptions
 ada crust apa? #intent:crustOptions
 pilihan crustnya apa? #intent:crustOptions
 ada crust apa aja #intent:crustOptions
+apa?
+halo
+what
+hi
+hello
+wow
+yeah

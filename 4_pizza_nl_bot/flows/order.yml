@@ -8,13 +8,17 @@ intents:
             match: order
         attributes:
             pizzaType:
-                nlu: pizzaType
+                nlu: entities
+                path: type[0].resolved.dictKey
             pizzaSize:
-                nlu: pizzaSize
+                nlu: entities
+                path: size[0].resolved.dictKey
             pizzaCrust:
-                nlu: pizzaCrust
+                nlu: entities
+                path: crust[0].resolved.dictKey
             pizzaQty:
-                nlu: pizzaQty
+                nlu: entities
+                path: crust[0].resolved.dictKey
     backToInfo:
         type: command
         condition: content == 'backToInfo'
@@ -23,33 +27,42 @@ intents:
         classifier:
             nlu: intent
             match: askOptions
-        attributes:
-            info:
-                nlu: pizzaInfo
+    askTypeInfo:
+        type: text
+        classifier:
+            nlu: intent
+            match: typeOptions
+    askCrustInfo:
+        type: text
+        classifier:
+            nlu: intent
+            match: crustOptions
+    askSizeInfo:
+        type: text
+        classifier:
+            nlu: intent
+            match: crustOptions
     addDetails:
         classifier:
-            - nlu: pizzaType
-            - nlu: pizzaSize
-            - nlu: pizzaCrust
-            - nlu: pizzaQty
+            nlu: intent
+            match: addDetails
         attributes:
             pizzaType:
-                nlu: pizzaType
+                nlu: entities
+                path: type[0].resolved.dictKey
             pizzaSize:
-                nlu: pizzaSize
+                nlu: entities
+                path: size[0].resolved.dictKey
             pizzaCrust:
-                nlu: pizzaCrust
+                nlu: entities
+                path: crust[0].resolved.dictKey
             pizzaQty:
-                nlu: pizzaQty
+                nlu: entities
+                path: crust[0].resolved.dictKey
     yes:
         classifier:
             nlu: intent
-            match: "yes"
-    no:
-        classifier:
-            nlu: intent
-            match: "no"
-
+            match: "confirm"
     reenter:
         type: command
         condition: content == "reenter"
@@ -83,16 +96,16 @@ states:
         transitions:
             typeInfo:
                 condition: 
-                    - "intent == 'askInfo' && attributes.info == 'pizzaType'" 
-                    - "intent == 'askInfo' && !context.type  && !attributes.info"
+                    - intent == 'askTypeInfo'
+                    - intent == 'askInfo' && !context.type
             crustInfo:
                 condition: 
-                    - "intent == 'askInfo' && attributes.info == 'pizzaCrust'"
-                    - "intent == 'askInfo' && !context.crust  && !attributes.info"
+                    - intent == 'askCrustInfo'
+                    - intent == 'askInfo' && !context.crust
             sizeInfo:
                 condition: 
-                    - "intent == 'askInfo' && attributes.info == 'pizzaSize'"
-                    - "intent == 'askInfo' && !context.size  && !attributes.info"
+                    - intent == 'askSizeInfo'
+                    - intent == 'askInfo' && !context.size
             orderConfirm:
                 condition: "context.crust && context.size && context.type && context.qty"
             orderInfo:

@@ -3,11 +3,12 @@ priority: 0
 intents:
     greet:
         initial: true
-        classifier:
-            nlu: intent
-            match: greet
+        condition: content == "hi"
     fallback:
         fallback: true
+        attributes:
+            nl:
+                nlu: entities
 states:
     init:
         initial: true

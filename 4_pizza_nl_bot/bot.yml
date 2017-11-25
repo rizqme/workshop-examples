@@ -3,10 +3,8 @@ name: 04 NL Pizza Bot
 desc: Bot for ordering pizza
 id: 4_pizza_nl_bot-rizqme
 lang: id
-version: 0.0.1
+version: 0.0.8
 flows:
-    order: $include(./flows/order.yml)
-    delivery: $include(./flows/delivery.yml)
     fallback: $include(./flows/fallback.yml)
 nlus:
     ner:
@@ -16,11 +14,10 @@ nlus:
     intent:
         type: nl
         options:
-            nluId: rizqme:pizzanl
+            nluId: 'rizqme:pizzanl'
             asIntent: intent
     entities:
         type: nl
         options:
-            nluId: rizqme:pizzanl
-    
+            nluId: 'rizqme:pizzanl'
 tag: null
